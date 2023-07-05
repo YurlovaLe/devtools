@@ -4,21 +4,19 @@
   box-sizing: border-box;
 }
 
-.list {
-  min-height: 774px;
+.app {
+  min-height: 100vh;
+  width: 100%;
   font-family: "StratosSkyeng", sans-serif;
-  background-color: #0080C1;
+  background-color: #004980;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.game {
-  padding-top: 52px;
-  padding-bottom: 50px;
+.set {
+  padding: 52px 70px 50px;
   background-color: #C2F5FF;
-  width: 480px;
-  height: 459px;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -53,8 +51,7 @@
     width: 98px;
     padding: 13px;
     border-radius: 12px;
-
-    &:hover
+    cursor: pointer;
   }
 
   &__button {
@@ -69,5 +66,12 @@
     height: 50px;
     border: none;
     border-radius: 12px;
+    cursor: pointer;
+  }
+  
+  &__difficulty-input {
+    display: none;
   }
 }
+
+input[type="radio"]:checked+label{ color: red; } 
