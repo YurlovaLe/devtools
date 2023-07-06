@@ -5,13 +5,25 @@
 }
 
 .app {
-  min-height: 100vh;
-  width: 100%;
-  font-family: "StratosSkyeng", sans-serif;
-  background-color: #004980;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  &__set {
+    min-height: 100vh;
+    width: 100%;
+    font-family: "StratosSkyeng", sans-serif;
+    background-color: #004980;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__game {
+    min-height: 100vh;
+    width: 100%;
+    font-family: "StratosSkyeng", sans-serif;
+    background-color: #004980;
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+  }
 }
 
 .set {
@@ -53,25 +65,104 @@
     border-radius: 12px;
     cursor: pointer;
   }
-
-  &__button {
-    background-color: #7AC100;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 32px;
-    width: 246px;
-    height: 50px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-  }
   
   &__difficulty-input {
     display: none;
   }
 }
 
+.button {
+  background-color: #7AC100;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px;
+  width: 246px;
+  height: 50px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
 input[type="radio"]:checked+label{ color: red; } 
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+
+  &__shirt {
+    border: 4px solid white;
+    border-radius: 4px;
+
+  }
+}
+
+.time {
+  &__name {
+    color: #FFF;
+    font-size: 16px;
+    line-height: 32px;
+    display: flex;
+    gap: 57px;
+    padding-right: 5px;
+    justify-content: flex-end;
+  }
+  &__timer {
+    color: #FFF;
+    font-size: 64px;
+    line-height: 72px;
+  }
+}
+
+.card {
+  width: 95px;
+  height: 133px;
+  border-radius: 4px;
+  background: #FFF;
+  padding: 6px;
+
+  &__name-container {
+    display: flex;
+  }
+
+  &__name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__rank {
+    color: #000;
+    line-height: 24px;
+    font-size: 24px;
+  }
+  &__suit {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 18px;
+    margin-bottom: 18px;
+
+    &_small {
+      width: 7px;
+      height: 6px;
+    }
+    &_big {
+      width: 29px;
+      height: 25.6px;
+    }
+  }
+}
+
+.reverse {
+  transform: rotate(180deg);
+}
