@@ -4,10 +4,10 @@ const game = {
   gameStatus: 'selection',
   cards: [],
   chosenCards: [],
-}
-const appEl = document.getElementById("app");
+};
+const appEl = document.getElementById('app');
 
-function renderAppSelection () {
+function renderAppSelection() {
   const appHtml = `<div class="app__set">
   <form class="set">
     <h1 class="set__heading">Выбери</br>сложность</h1>
@@ -27,16 +27,18 @@ function renderAppSelection () {
   appEl.innerHTML = appHtml;
 }
 
-function createCardsShirts(difficulty) {
+function createCardsShirts() {
   let cards = '';
-  numberOfCards = difficulty*6;
+  let numberOfCards = 36;
   for (let i = 0; i < numberOfCards; i++) {
-    cards = cards + '<img src="./card_shirt.png" alt="" class="cards__shirt"> ';
+    cards =
+      cards +
+      '<div class="cards__shirt"> <img src="./card_shirt.png" alt="" class="cards__shirt_img"> </div>';
   }
   return cards;
 }
 
-function renderAppStartGame (difficulty) {
+function renderAppStartGame() {
   const appHtml = `<div class="app__game">
   <div class="top">
     <div class="time">
@@ -49,24 +51,26 @@ function renderAppStartGame (difficulty) {
     <button class="button">Начать заново</button>
   </div>
   <div class="cards">
-    ${createCardsShirts(difficulty)}
+    ${createCardsShirts()}
   </div>
 </div>
   `;
   appEl.innerHTML = appHtml;
-  appEl.addEventListener('click', (event) => {
+  appEl.addEventListener('click', () => {
     renderAppGame();
-  })
+  });
 }
 
-ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6'];
-suits = ['spades.svg', 'hearts.svg', 'diamonds.svg', 'clubs.svg']
+const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6'];
+const suits = ['spades.svg', 'hearts.svg', 'diamonds.svg', 'clubs.svg'];
 
 function createCards() {
   let cards = '';
   for (let j = 0; j < suits.length; j++) {
     for (let i = 0; i < ranks.length; i++) {
-      cards = cards + `<div class="card">
+      cards =
+        cards +
+        `<div class="card">
       <div class="card__name-container">
         <div class="card__name">
           <p class="card__rank">${ranks[i]}</p>
@@ -89,7 +93,7 @@ function createCards() {
   return cards;
 }
 
-function renderAppGame () {
+function renderAppGame() {
   const appHtml = `<div class="app__game">
   <div class="top">
     <div class="time">
@@ -110,7 +114,7 @@ function renderAppGame () {
 }
 
 if (game.gameStatus === 'selection') {
-  renderAppSelection ();
+  renderAppSelection();
   let levels = document.querySelectorAll('input[type="radio"]');
   let setButton = document.querySelector('#button');
 
@@ -121,14 +125,12 @@ if (game.gameStatus === 'selection') {
       if (level.checked) {
         game.difficulty = level.value;
         game.gameStatus = game;
-        renderAppStartGame(game.difficulty);
+        renderAppStartGame();
       }
     }
-  })
+  });
 }
-
 
 // if (game.gameStatus === 'finish') {
 //   renderAppFinish (result, time);
 // }
-
