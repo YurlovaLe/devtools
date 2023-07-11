@@ -4,24 +4,35 @@
   box-sizing: border-box;
 }
 
-.app {
+.app__set {
   min-height: 100vh;
   width: 100%;
-  font-family: "StratosSkyeng", sans-serif;
+  font-family: StratosSkyeng, sans-serif;
   background-color: #004980;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.app__game {
+  min-height: 100vh;
+  width: 100%;
+  font-family: StratosSkyeng, sans-serif;
+  background-color: #004980;
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+}
+
 .set {
   padding: 52px 70px 50px;
-  background-color: #C2F5FF;
+  background-color: #c2f5ff;
   border-radius: 12px;
   display: flex;
   align-items: center;
   flex-direction: column;
 }
+
 .set__heading {
   text-align: center;
   font-size: 40px;
@@ -30,15 +41,17 @@
   line-height: 48px;
   color: #004980;
 }
+
 .set__level-box {
   display: flex;
   gap: 24px;
   padding-top: 48px;
   padding-bottom: 67px;
 }
+
 .set__level {
-  background-color: #FFFFFF;
-  color: #0080C1;
+  background-color: #fff;
+  color: #0080c1;
   text-align: center;
   font-size: 64px;
   font-style: normal;
@@ -49,9 +62,14 @@
   border-radius: 12px;
   cursor: pointer;
 }
-.set__button {
-  background-color: #7AC100;
-  color: #FFFFFF;
+
+.set__difficulty-input {
+  display: none;
+}
+
+.button {
+  background-color: #7ac100;
+  color: #fff;
   text-align: center;
   font-size: 24px;
   font-style: normal;
@@ -63,10 +81,94 @@
   border-radius: 12px;
   cursor: pointer;
 }
-.set__difficulty-input {
-  display: none;
+
+input[type='radio']:checked + label {
+  color: red;
 }
 
-input[type=radio]:checked + label {
-  color: red;
-}/*# sourceMappingURL=style.css.map */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  padding-top: 35px;
+}
+
+.cards__shirt {
+  background-color: #fff;
+  height: 129px;
+  width: 91px;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.cards__shirt_img {
+  border-radius: 4px;
+}
+
+.time__name {
+  color: #fff;
+  font-size: 16px;
+  line-height: 1px;
+  display: flex;
+  gap: 57px;
+  padding-right: 5px;
+  justify-content: flex-end;
+}
+
+.time__timer {
+  color: #fff;
+  font-size: 64px;
+  line-height: 72px;
+}
+
+.card {
+  width: 95px;
+  height: 133px;
+  border-radius: 4px;
+  background: #fff;
+  padding: 6px;
+}
+
+.card__name-container {
+  display: flex;
+}
+
+.card__name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card__rank {
+  color: #000;
+  line-height: 24px;
+  font-size: 24px;
+}
+
+.card__suit {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 18px;
+  margin-bottom: 18px;
+}
+
+.card__suit_small {
+  width: 7px;
+  height: 6px;
+}
+
+.card__suit_big {
+  width: 29px;
+  height: 25.6px;
+}
+
+.reverse {
+  transform: rotate(180deg);
+}
