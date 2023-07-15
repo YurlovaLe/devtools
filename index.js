@@ -4,24 +4,27 @@ const game = {
   difficulty: undefined,
   time: 0,
   gameStatus: 'selection',
+  isWin: false,
   cards: [],
   chosenCards: [],
+  numberOfFindePair: 0,
 };
 const appEl = document.getElementById('app');
+const popup = document.querySelector('.popup');
 
 function renderAppSelection() {
   const appHtml = `<div class="app__set">
-  <form class="set">
-    <h1 class="set__heading">Выбери</br>сложность</h1>
-    <div class="set__level-box">
-      <input type="radio" id="difficulty-easy" name="difficulty" value="1" class="set__difficulty-input">
-      <label for="difficulty-easy" class="set__level">1</label>
+  <form class="box">
+    <h1 class="box__heading">Выбери</br>сложность</h1>
+    <div class="box__level-box">
+      <input type="radio" id="difficulty-easy" name="difficulty" value="1" class="box__difficulty-input">
+      <label for="difficulty-easy" class="box__level">1</label>
 
-      <input type="radio" id="difficulty-medium" name="difficulty" value="2" class="set__difficulty-input">
-      <label for="difficulty-medium" class="set__level">2</label>
+      <input type="radio" id="difficulty-medium" name="difficulty" value="2" class="box__difficulty-input">
+      <label for="difficulty-medium" class="box__level">2</label>
 
-      <input type="radio" id="difficulty-hard" name="difficulty" value="3" class="set__difficulty-input">
-      <label for="difficulty-hard" class="set__level">3</label>
+      <input type="radio" id="difficulty-hard" name="difficulty" value="3" class="box__difficulty-input">
+      <label for="difficulty-hard" class="box__level">3</label>
     </div>
     <button type="submit" class="button" id="button">Старт</button>
   </form>
@@ -64,7 +67,7 @@ function renderAppStartGame(numberOfCards) {
       if (game.chosenCards.includes(i)) {
         return;
       }
-      if (game.chosenCards.length < 2) {
+      if (game.chosenCards.length < numberOfCards) {
         let card = game.cards[i].split(' ');
         game.chosenCards.push(i);
         console.log(game.chosenCards);
@@ -84,16 +87,26 @@ function renderAppStartGame(numberOfCards) {
           </div>
         </div>
       `;
-      }
-      if (game.chosenCards.length === 2) {
-        alert(
-          game.cards[game.chosenCards[0]] === game.cards[game.chosenCards[1]]
-            ? 'Вы победили'
-            : 'Вы проиграли',
-        );
+        if (game.chosenCards.length % 2 === 0) {
+          let i = game.chosenCards.length;
+          game.cards[game.chosenCards[i - 1]] ===
+          game.cards[game.chosenCards[i - 2]]
+            ? game.numberOfFindePair++
+            : renderAppFinish(false, game.time);
+        }
+        if (game.numberOfFindePair * 2 === numberOfCards) {
+          renderAppFinish(true, game.time);
+        }
       }
     });
   }
+  StartTimer();
+  let button = document.querySelector('.button');
+  button.addEventListener('click', () => {
+    game.gameStatus = 'selection';
+    clearInterval(timerId);
+    startGame();
+  });
 }
 
 const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6'];
@@ -177,28 +190,93 @@ function renderAppGame(numberOfCards) {
 </div>
   `;
   appEl.innerHTML = appHtml;
-}
-
-if (game.gameStatus === 'selection') {
-  renderAppSelection();
-  let levels = document.querySelectorAll('input[type="radio"]');
-  let setButton = document.querySelector('#button');
-
-  setButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    for (let level of levels) {
-      if (level.checked) {
-        game.difficulty = level.value;
-        game.gameStatus = game;
-        let numberOfCards = game.difficulty * 6;
-        renderAppGame(numberOfCards);
-        setTimeout(renderAppStartGame, 5000, numberOfCards);
-      }
-    }
+  let button = document.querySelector('.button');
+  button.addEventListener('click', () => {
+    game.gameStatus = 'selection';
+    startGame();
   });
 }
 
-// if (game.gameStatus === 'finish') {
-//   renderAppFinish (result, time);
-// }
+function startGame() {
+  popup.style.display = 'none';
+  game.difficulty = undefined;
+  game.time = 0;
+  game.cards = [];
+  game.chosenCards = [];
+  game.numberOfFindePair = 0;
+
+  if (game.gameStatus === 'selection') {
+    renderAppSelection();
+    let levels = document.querySelectorAll('input[type="radio"]');
+    let setButton = document.querySelector('#button');
+
+    setButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      for (let level of levels) {
+        if (level.checked) {
+          game.difficulty = level.value;
+          game.gameStatus = game;
+          let numberOfCards = game.difficulty * 6;
+          renderAppGame(numberOfCards);
+          setTimeout(renderAppStartGame, 5000, numberOfCards);
+        }
+      }
+    });
+  }
+}
+
+startGame();
+let timerId;
+function StartTimer() {
+  let timeStart = new Date();
+  function updateTime() {
+    let timer = document.querySelector('.time__timer');
+    let time = new Date() - timeStart;
+    let min = '';
+    let sec = '';
+
+    if (Math.floor(time / 60000) < 10) {
+      min = '0' + Math.floor(time / 60000);
+    } else {
+      min = Math.floor(time / 60000);
+    }
+
+    if (Math.floor(time / 1000 - min * 60) < 10) {
+      sec = '0' + Math.floor(time / 1000 - min * 60);
+    } else {
+      sec = Math.floor(time / 1000 - min * 60);
+    }
+
+    game.time = min + '.' + sec;
+    timer.innerHTML = game.time;
+  }
+
+  timerId = setInterval(updateTime, 1000);
+  updateTime();
+}
+
+function renderAppFinish(result, time) {
+  game.numberOfFindePair = 0;
+  clearInterval(timerId);
+  popup.innerHTML = `<div class="popup__body">
+    <div class="popup__content box">
+      <img ${
+        result ? 'src="./static/celebration.png"' : 'src="./static/dead.png"'
+      } alt="" class="popup__img">
+      <h1 class="box__heading">${result ? 'Вы выиграли!' : 'Вы проиграли!'}</h1>
+      <p class="popup__text">Затраченное время:</p>
+      <p class="popup__text_time">${time}</p>
+      <button class="button popup__button">Играть снова</button>
+    </div>
+  </div>
+  `;
+  popup.style.display = 'flex';
+
+  let popupButton = document.querySelector('.popup__button');
+  popupButton.addEventListener('click', () => {
+    game.gameStatus = 'selection';
+    startGame();
+    console.log(game);
+  });
+}

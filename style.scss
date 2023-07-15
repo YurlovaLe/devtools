@@ -2,13 +2,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'StratosSkyeng', sans-serif;
 }
 
 .app {
   &__set {
     min-height: 100vh;
     width: 100%;
-    font-family: 'StratosSkyeng', sans-serif;
     background-color: #004980;
     display: flex;
     justify-content: center;
@@ -26,7 +26,7 @@
   }
 }
 
-.set {
+.box {
   padding: 52px 70px 50px;
   background-color: #c2f5ff;
   border-radius: 12px;
@@ -172,5 +172,55 @@ input[type='radio']:checked + label {
 }
 
 .reverse {
+  position: relative;
+  z-index: 1;
   transform: rotate(180deg);
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  background-color: rgba(0, 73, 128, 0.8999999761581421);
+  justify-content: center;
+  align-items: center;
+
+  &__body {
+    max-width: 480px;
+    max-height: 459px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__content {
+    padding-top: 26px;
+    padding-left: 112px;
+    padding-right: 112px;
+  }
+
+  &__img {
+    margin-bottom: 9px;
+  }
+
+  &__text {
+    color: #000;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 32px;
+    margin-top: 28px;
+    margin-bottom: 10px;
+
+    &_time {
+      color: #000;
+      font-size: 64px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 72px;
+      margin-bottom: 40px;
+    }
+  }
 }
