@@ -1,6 +1,13 @@
-import { StartTimer } from './helpers.js';
+import { StartTimer } from './helpers';
+import type {
+  Game,
+  RenderAppSelection,
+  RenderAppGame,
+  RenderAppStartGame,
+  RenderAppFinish,
+} from './types';
 
-export function renderAppSelection({ appEl, chooseLevel }) {
+export function renderAppSelection({ appEl, chooseLevel }: RenderAppSelection) {
   const appHtml = `<div class="app__set">
     <form class="box">
       <h1 class="box__heading">Выбери</br>сложность</h1>
@@ -18,24 +25,26 @@ export function renderAppSelection({ appEl, chooseLevel }) {
     </form>
   </div>`;
   appEl.innerHTML = appHtml;
-  let levels = document.querySelectorAll('input[type="radio"]');
-  let setButton = document.querySelector('#button');
+  const levels: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+    'input[type="radio"]',
+  );
+  const setButton = document.querySelector('#button') as HTMLButtonElement;
 
   setButton.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
-    for (let level of levels) {
+    for (const level of levels) {
       if (level.checked) {
-        chooseLevel(level.value);
+        chooseLevel(Number(level.value));
       }
     }
   });
 }
 
-function createCards(game) {
+function createCards(game: Game) {
   let cards = '';
   for (let i = 0; i < game.cards.length; i++) {
-    let card = game.cards[i].split(' ');
+    const card = game.cards[i].split(' ');
     cards =
       cards +
       `<div class="card">
@@ -60,7 +69,7 @@ function createCards(game) {
   return cards;
 }
 
-export function renderAppGame({ appEl, startGame, game }) {
+export function renderAppGame({ appEl, startGame, game }: RenderAppGame) {
   const appHtml = `<div class="app__game">
     <div class="top">
       <div class="time">
@@ -77,14 +86,19 @@ export function renderAppGame({ appEl, startGame, game }) {
     </div>
   </div>`;
   appEl.innerHTML = appHtml;
-  let button = document.querySelector('.button');
+  const button = document.querySelector('.button') as HTMLButtonElement;
   button.addEventListener('click', () => {
     startGame();
   });
 }
 
-export function renderAppStartGame({ appEl, game, startGame, onCardClick }) {
-  function createCardsShirts(numberOfCards) {
+export function renderAppStartGame({
+  appEl,
+  game,
+  startGame,
+  onCardClick,
+}: RenderAppStartGame) {
+  function createCardsShirts(numberOfCards: number) {
     let cards = '';
     for (let i = 0; i < numberOfCards; i++) {
       cards =
@@ -110,7 +124,10 @@ export function renderAppStartGame({ appEl, game, startGame, onCardClick }) {
   </div>
   `;
   appEl.innerHTML = appHtml;
-  let cards = document.querySelectorAll('.cards__shirt');
+  const cards = document.querySelectorAll(
+    '.cards__shirt',
+  ) as NodeListOf<HTMLDivElement>;
+
   for (let i = 0; i < game.cards.length; i++) {
     cards[i].addEventListener('click', () => {
       if (game.chosenCards.includes(i)) {
@@ -120,14 +137,18 @@ export function renderAppStartGame({ appEl, game, startGame, onCardClick }) {
     });
   }
   StartTimer({ game });
-  let button = document.querySelector('.button');
+  const button = document.querySelector('.button') as HTMLButtonElement;
   button.addEventListener('click', () => {
     clearInterval(game.timerId);
     startGame();
   });
 }
 
-export function turnCard(cards, index, card) {
+export function turnCard(
+  cards: NodeListOf<HTMLDivElement>,
+  index: number,
+  card: string[],
+) {
   cards[index].innerHTML = `<div class="card__name-container">
   <div class="card__name">
     <p class="card__rank">${card[0]}</p>
@@ -146,7 +167,12 @@ export function turnCard(cards, index, card) {
 `;
 }
 
-export function renderAppFinish({ result, game, popup, startGame }) {
+export function renderAppFinish({
+  result,
+  game,
+  popup,
+  startGame,
+}: RenderAppFinish) {
   game.numberOfFindePair = 0;
   clearInterval(game.timerId);
   popup.innerHTML = `<div class="popup__body">
@@ -163,7 +189,9 @@ export function renderAppFinish({ result, game, popup, startGame }) {
   `;
   popup.style.display = 'flex';
 
-  let popupButton = document.querySelector('.popup__button');
+  const popupButton = document.querySelector(
+    '.popup__button',
+  ) as HTMLButtonElement;
   popupButton.addEventListener('click', () => {
     startGame();
   });
