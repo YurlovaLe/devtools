@@ -1,3 +1,5 @@
+import './style.css';
+
 const game = {
   difficulty: undefined,
   time: 0,
@@ -27,18 +29,17 @@ function renderAppSelection() {
   appEl.innerHTML = appHtml;
 }
 
-function createCardsShirts() {
+function createCardsShirts(numberOfCards) {
   let cards = '';
-  let numberOfCards = 36;
   for (let i = 0; i < numberOfCards; i++) {
     cards =
       cards +
-      '<div class="cards__shirt"> <img src="./card_shirt.png" alt="" class="cards__shirt_img"> </div>';
+      '<div class="cards__shirt"> <img src="./static/card_shirt.png" alt="" class="cards__shirt_img"> </div>';
   }
   return cards;
 }
 
-function renderAppStartGame() {
+function renderAppStartGame(numberOfCards) {
   const appHtml = `<div class="app__game">
   <div class="top">
     <div class="time">
@@ -51,49 +52,114 @@ function renderAppStartGame() {
     <button class="button">Начать заново</button>
   </div>
   <div class="cards">
-    ${createCardsShirts()}
+    ${createCardsShirts(numberOfCards)}
   </div>
 </div>
   `;
   appEl.innerHTML = appHtml;
-  appEl.addEventListener('click', () => {
-    renderAppGame();
-  });
+  let cards = document.querySelectorAll('.cards__shirt');
+  console.log(cards);
+  for (let i = 0; i < numberOfCards; i++) {
+    cards[i].addEventListener('click', () => {
+      if (game.chosenCards.includes(i)) {
+        return;
+      }
+      if (game.chosenCards.length < 2) {
+        let card = game.cards[i].split(' ');
+        game.chosenCards.push(i);
+        console.log(game.chosenCards);
+        cards[i].innerHTML = `<div class="card__name-container">
+          <div class="card__name">
+            <p class="card__rank">${card[0]}</p>
+            <img src="./${card[1]}" alt="" class="card__suit_small">
+          </div>
+        </div>
+        <div class="card__suit">
+          <img src="./${card[1]}" alt="" class="card__suit_big">
+        </div>
+        <div class="card__name-container reverse">
+          <div class="card__name">
+            <p class="card__rank">${card[0]}</p>
+            <img src="./${card[1]}" alt="" class="card__suit_small">
+          </div>
+        </div>
+      `;
+      }
+      if (game.chosenCards.length === 2) {
+        alert(
+          game.cards[game.chosenCards[0]] === game.cards[game.chosenCards[1]]
+            ? 'Вы победили'
+            : 'Вы проиграли',
+        );
+      }
+    });
+  }
 }
 
 const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6'];
-const suits = ['spades.svg', 'hearts.svg', 'diamonds.svg', 'clubs.svg'];
+const suits = [
+  './static/spades.svg',
+  './static/hearts.svg',
+  './static/diamonds.svg',
+  './static/clubs.svg',
+];
 
-function createCards() {
-  let cards = '';
+function createCardDeck() {
+  let cards = [];
   for (let j = 0; j < suits.length; j++) {
     for (let i = 0; i < ranks.length; i++) {
-      cards =
-        cards +
-        `<div class="card">
-      <div class="card__name-container">
-        <div class="card__name">
-          <p class="card__rank">${ranks[i]}</p>
-          <img src="./${suits[j]}" alt="" class="card__suit_small">
-        </div>
-      </div>
-      <div class="card__suit">
-        <img src="./${suits[j]}" alt="" class="card__suit_big">
-      </div>
-      <div class="card__name-container reverse">
-        <div class="card__name">
-          <p class="card__rank">${ranks[i]}</p>
-          <img src="./${suits[j]}" alt="" class="card__suit_small">
-        </div>
-      </div>
-    </div> 
-    `;
+      cards.push(ranks[i] + ' ' + suits[j]);
     }
   }
   return cards;
 }
 
-function renderAppGame() {
+function createCards(numberOfCards) {
+  let cards = '';
+  let cardDeck = createCardDeck();
+  let randomCards = [];
+
+  for (let i = 0; i < numberOfCards / 2; i++) {
+    let randome = Math.floor(Math.random() * (36 - i));
+    randomCards.push(cardDeck[randome]);
+    randomCards.push(cardDeck[randome]);
+    cardDeck.splice(randome, 1);
+  }
+
+  for (let i = 0; i < numberOfCards; i++) {
+    let randome = Math.floor(Math.random() * (numberOfCards - i));
+    game.cards.push(randomCards[randome]);
+    randomCards.splice(randome, 1);
+  }
+  console.log(game.cards);
+
+  for (let i = 0; i < numberOfCards; i++) {
+    let card = game.cards[i].split(' ');
+    cards =
+      cards +
+      `<div class="card">
+      <div class="card__name-container">
+        <div class="card__name">
+          <p class="card__rank">${card[0]}</p>
+          <img src="./${card[1]}" alt="" class="card__suit_small">
+        </div>
+      </div>
+      <div class="card__suit">
+        <img src="./${card[1]}" alt="" class="card__suit_big">
+      </div>
+      <div class="card__name-container reverse">
+        <div class="card__name">
+          <p class="card__rank">${card[0]}</p>
+          <img src="./${card[1]}" alt="" class="card__suit_small">
+        </div>
+      </div>
+    </div> 
+    `;
+  }
+  return cards;
+}
+
+function renderAppGame(numberOfCards) {
   const appHtml = `<div class="app__game">
   <div class="top">
     <div class="time">
@@ -106,7 +172,7 @@ function renderAppGame() {
     <button class="button">Начать заново</button>
   </div>
   <div class="cards">
-    ${createCards()}
+    ${createCards(numberOfCards)}
   </div>
 </div>
   `;
@@ -125,7 +191,9 @@ if (game.gameStatus === 'selection') {
       if (level.checked) {
         game.difficulty = level.value;
         game.gameStatus = game;
-        renderAppStartGame();
+        let numberOfCards = game.difficulty * 6;
+        renderAppGame(numberOfCards);
+        setTimeout(renderAppStartGame, 5000, numberOfCards);
       }
     }
   });
