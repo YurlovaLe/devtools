@@ -15,5 +15,16 @@
     "prettier/prettier": "error",
     "camelcase":["error"],
     "eqeqeq":["error", "always"]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts"],
+      "plugins": ["prettier", "@typescript-eslint"],
+      "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["./tsconfig.json"]
+      }
+    }
+  ]
 }
